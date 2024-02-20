@@ -1,41 +1,54 @@
-import {createContext, useContext, useState} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const StateContext = createContext({
   currentUser: {},
   userToken: null,
   surveys: [],
-  questionTypes: [],
   toast: {
     message: null,
     show: false,
   },
-  setCurrentUser: () => {
-  },
-  setUserToken: () => {
-  },
+  setCurrentUser: () => {},
+  setUserToken: () => {},
+  isAdmin: false,
+  setIsAdmin: () => {},
+  isAuthenticated: false,
+  setIsAuthenticated: () => {}
 });
-export const ContextProvider = ({children}) => {
+
+export const ContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
-  const [userToken, _setUserToken] = useState(localStorage.getItem('TOKEN') || '');
-  const [surveys, setSurveys] = useState(tmpSurveys)
-  const [questionTypes] = useState(['text', "select", "radio", "checkbox", "textarea"])
-  const [toast, setToast] = useState({message: '', show: false})
+  const [userToken, _setUserToken] = useState(localStorage.getItem("TOKEN") || "");
+  const [toast, setToast] = useState({ message: "", show: false });
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("TOKEN", userToken);
+  }, [userToken]);
+
+  useEffect(() => {
+    localStorage.setItem("CURRENT_USER", JSON.stringify(currentUser));
+  }, [currentUser]);
+
+  useEffect(() => {
+    localStorage.setItem("IS_ADMIN", isAdmin);
+  }, [isAdmin]);
+
+  useEffect(() => {
+    localStorage.setItem("IS_AUTHENTICATED", isAuthenticated);
+  }, [isAuthenticated]);
 
   const setUserToken = (token) => {
-    if (token) {
-      localStorage.setItem('TOKEN', token)
-    } else {
-      localStorage.removeItem('TOKEN')
-    }
     _setUserToken(token);
-  }
+  };
 
   const showToast = (message) => {
-    setToast({message, show: true})
+    setToast({ message, show: true });
     setTimeout(() => {
-      setToast({message: '', show: false})
-    }, 5000)
-  }
+      setToast({ message: "", show: false });
+    }, 5000);
+  };
 
   return (
     <StateContext.Provider
@@ -44,10 +57,12 @@ export const ContextProvider = ({children}) => {
         setCurrentUser,
         userToken,
         setUserToken,
-        surveys,
-        questionTypes,
         toast,
-        showToast
+        showToast,
+        isAdmin,
+        setIsAdmin,
+        isAuthenticated,
+        setIsAuthenticated,
       }}
     >
       {children}

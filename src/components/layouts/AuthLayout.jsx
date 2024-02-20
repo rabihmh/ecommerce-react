@@ -1,19 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Navbar from '../Navbar';
-import { AuthContext } from '../../context/auth';
+import { Outlet } from 'react-router-dom';
+import { useStateContext } from '../../context/ContextProvider';
+import { Navigate } from 'react-router-dom';
 
-const AuthLayout = ({ children }) => {
-  const { isLoading, user } = useContext(AuthContext);
-
-  if (isLoading) {
-    // Render loading state or skeleton component
-    return null;
-  }
-
+const AuthLayout = () => {
+  const { isAuthenticated } = useStateContext();
+  
   return (
     <div>
-      <Navbar />
-      <div className="container mx-auto">{children}</div>
+      <Navbar isAuthenticated={isAuthenticated} />
+      <Outlet />
+      <div className="container mx-auto">
+      </div>
+      <Navigate to={isAuthenticated ? "/home" : "/login"} />
     </div>
   );
 };

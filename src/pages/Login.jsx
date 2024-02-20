@@ -1,27 +1,30 @@
-import {LockClosedIcon} from "@heroicons/react/20/solid";
-import {useState} from "react";
-import {Link} from "react-router-dom";
+import { LockClosedIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import axiosClient from "../axios";
-import {useStateContext} from "../context/ContextProvider.jsx";
+import { useStateContext } from "../context/ContextProvider.jsx";
 
- function Login() {
-  const {setCurrentUser, setUserToken} = useStateContext();
+function Login() {
+  const { setCurrentUser, setUserToken, setIsAdmin,setIsAuthenticated } = useStateContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState({__html: ""});
+  const [error, setError] = useState({ __html: "" });
 
   const onSubmit = (ev) => {
     ev.preventDefault();
-    setError({__html: ""});
+    setError({ __html: "" });
 
     axiosClient
-      .post("/login", {
+      .post("/auth/login", {
         email,
         password,
       })
-      .then(({data}) => {
-        setCurrentUser(data.user);
+      .then(({ data }) => {
+        setCurrentUser(data);
         setUserToken(data.token);
+        const isAdmin = data.roles.includes("Admin");
+        setIsAdmin(isAdmin);
+        setIsAuthenticated(true);
       })
       .catch((error) => {
         if (error.response) {
@@ -29,7 +32,7 @@ import {useStateContext} from "../context/ContextProvider.jsx";
             (accum, next) => [...accum, ...next],
             []
           );
-          setError({__html: finalErrors.join("<br>")});
+          setError({ __html: finalErrors.join("<br>") });
         }
         console.error(error);
       });
@@ -121,12 +124,12 @@ import {useStateContext} from "../context/ContextProvider.jsx";
               type="submit"
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-              <LockClosedIcon
-                className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                aria-hidden="true"
-              />
-            </span>
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <LockClosedIcon
+                  className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                  aria-hidden="true"
+                />
+              </span>
               Sign in
             </button>
           </div>
@@ -135,4 +138,5 @@ import {useStateContext} from "../context/ContextProvider.jsx";
     </>
   );
 }
+
 export default Login;
