@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../../axios';
 import { useNavigate } from 'react-router-dom';
+import {PencilIcon, TrashIcon} from '@heroicons/react/20/solid';
+import swal from 'sweetalert';
+
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -30,6 +33,34 @@ const Products = () => {
 
   const handleAddNewProduct = () => {
     navigate('/admin/products/add');
+  };
+  const handleDeleteProduct = (productId) => {
+    swal({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this product!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        try {
+          await axiosClient.delete(`/products/${productId}`);
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.id !== productId)
+          );
+          swal('Poof! Your product has been deleted!', {
+            icon: 'success',
+          });
+        } catch (error) {
+          console.error('Error deleting product:', error);
+          swal('Oops! Something went wrong!', {
+            icon: 'error',
+          });
+        }
+      } else {
+        swal('Your product is safe!');
+      }
+    });
   };
 
   return (
@@ -64,12 +95,20 @@ const Products = () => {
                 <td className="whitespace-nowrap px-4 py-2 text-gray-700">{product.price}</td>
                 <td className="whitespace-nowrap px-4 py-2 text-gray-700">{product.description}</td>
                 <td className="whitespace-nowrap px-4 py-2">
-                  <button
-                    onClick={() => handleUpdateProduct(product.id)}
-                    className="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-                  >
-                    Edit
+                <button
+                          onClick={() => handleUpdateProduct(product.id)}
+                          className="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700 mr-1"
+                        >
+                          <PencilIcon className="h-4 w-4 inline-block mr-1" />
+                          Edit
                   </button>
+                        <button
+                          onClick={() => handleDeleteProduct(product.id)}
+                          className="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700"
+                        >
+                          <TrashIcon className="h-4 w-4 inline-block mr-1" />
+                          Delete
+                        </button>
                 </td>
               </tr>
             ))}

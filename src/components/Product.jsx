@@ -1,6 +1,11 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 
 const Product = ({product}) => {
+  const navigate = useNavigate();
+  const addToCart = (ID) => {
+    navigate(`/products/show/${ID}`);
+  }
   return (
     <a href="#" className="group relative block overflow-hidden">
       <button className="absolute end-4 top-4 z-10 rounded-full bg-white p-1.5 text-gray-900 transition hover:text-gray-900/75">
@@ -32,7 +37,7 @@ const Product = ({product}) => {
         <h3 className="mt-4 text-lg font-medium text-gray-900">{product.name}</h3>
         <p className="mt-1.5 text-sm text-gray-700">${product.price}</p>
         <form className="mt-4">
-        <button className="block w-full rounded bg-indigo-500 p-3 text-sm font-medium transition hover:scale-105">
+        <button className="block w-full rounded bg-indigo-500 p-3 text-sm font-medium transition hover:scale-105" onClick={() => addToCart(product.id)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

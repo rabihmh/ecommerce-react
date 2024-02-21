@@ -10,16 +10,12 @@ const AdminLayout = ({ children }) => {
   if (isLoading) {
     return null;
   }
-
-  if (!isAdmin) {
-    return <p>Unauthorized Access</p>;
-  }
-
   return (
     <div>
       <Navbar />
       <Outlet />
       <div className="container mx-auto">{children}</div>
+      <Navigate to={isAdmin ? "/admin/products" : "/login"} />
     </div>
   );
 };

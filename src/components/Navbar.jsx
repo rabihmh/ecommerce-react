@@ -20,7 +20,7 @@ const adminNavigation = [
 ];
 
 const Navbar = ({ isGuest }) => {
-  const { setIsAuthenticated, setCurrentUser, setUserToken,isAuthenticated,isAdmin } = useStateContext();
+  const { setIsAuthenticated, setCurrentUser, setUserToken,isAuthenticated,isAdmin,setIsAdmin } = useStateContext();
   let navigation = guestNavigation;
 
   if (isAuthenticated) {
@@ -29,6 +29,7 @@ const Navbar = ({ isGuest }) => {
   
   const signOut = () => {
     setIsAuthenticated(false);
+    setIsAdmin(false);
     setCurrentUser({});
     setUserToken(null);
 

@@ -12,6 +12,9 @@ import AddProduct from './pages/Admin/AddProduct';
 import CategoryList from './pages/Admin/CategoryList';
 import Dashboard from './pages/Admin/Dashboard'
 import ProductCollection from './pages/ProductCollection';
+import AddCategory from './pages/Admin/AddCategory';
+import UpdateCategory from './pages/Admin/UpdateCategory';
+import ProductOverview from './pages/ProductOverview';
 const RouterComponent = createBrowserRouter([
   {
       path: '/',
@@ -38,6 +41,10 @@ const RouterComponent = createBrowserRouter([
       {
         path:'/products',
         element: <ProductCollection />
+      },
+      {
+        path:'/products/show/:id',
+        element: <ProductOverview />
       }
 
     ]
@@ -59,8 +66,16 @@ const RouterComponent = createBrowserRouter([
         element: <ProductEdit /> 
       },
       {
+        path:'/admin/categories/add',
+        element: <AddCategory />
+      },
+      {
         path:'/admin/categories',
         element: <CategoryList />
+      },
+      {
+        path:'/admin/categories/:id',
+        element: <UpdateCategory />
       },
       {
         path:'/admin/products/add',
