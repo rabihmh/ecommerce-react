@@ -1,23 +1,24 @@
 import React, { useContext } from 'react';
 import Navbar from '../Navbar';
-import { AuthContext } from '../../context/auth';
+import { Outlet } from 'react-router-dom';
+import { useStateContext } from '../../context/ContextProvider';
+import { Navigate } from 'react-router-dom';
 
 const AdminLayout = ({ children }) => {
-  const { isLoading, user, isAdmin } = useContext(AuthContext);
+  const { isLoading, isAdmin } =  useStateContext();
 
   if (isLoading) {
-    // Render loading state or skeleton component
     return null;
   }
 
   if (!isAdmin) {
-    // Handle unauthorized access here, redirect or show error message
     return <p>Unauthorized Access</p>;
   }
 
   return (
     <div>
       <Navbar />
+      <Outlet />
       <div className="container mx-auto">{children}</div>
     </div>
   );

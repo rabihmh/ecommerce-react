@@ -9,23 +9,29 @@ const guestNavigation = [
 ];
 
 const defaultNavigation = [
-  { name: 'Dashboard', path: '/dashboard' },
+  { name: 'Products', path: '/products' },
   { name: 'Team', path: '/team' },
   { name: 'Projects', path: '/projects' },
   { name: 'Calendar', path: '/calendar' },
 ];
+const adminNavigation = [
+  { name: 'Products', path: '/admin/products' },
+  { name: 'Categories', path: '/admin/categories' },
+];
 
 const Navbar = ({ isGuest }) => {
-  const { setIsAuthenticated, setCurrentUser, setUserToken } = useStateContext();
-  const navigation = isGuest ? guestNavigation : defaultNavigation;
+  const { setIsAuthenticated, setCurrentUser, setUserToken,isAuthenticated,isAdmin } = useStateContext();
+  let navigation = guestNavigation;
 
+  if (isAuthenticated) {
+    navigation = isAdmin ? adminNavigation : defaultNavigation;
+  }
+  
   const signOut = () => {
-    // Clear all context values
     setIsAuthenticated(false);
     setCurrentUser({});
     setUserToken(null);
 
-    // Perform any additional sign out actions if needed
     console.log('Signing out...');
   };
 

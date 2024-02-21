@@ -17,11 +17,14 @@ const StateContext = createContext({
 });
 
 export const ContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({});
-  const [userToken, _setUserToken] = useState(localStorage.getItem("TOKEN") || "");
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem("CURRENT_USER");
+    return savedUser ? JSON.parse(savedUser) : {};
+  });
+  const [userToken, _setUserToken] = useState(() => localStorage.getItem("TOKEN") || "");
   const [toast, setToast] = useState({ message: "", show: false });
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(() => localStorage.getItem("IS_ADMIN") === "true");
+  const [isAuthenticated, setIsAuthenticated] = useState(() => localStorage.getItem("IS_AUTHENTICATED") === "true");
 
   useEffect(() => {
     localStorage.setItem("TOKEN", userToken);
@@ -62,10 +65,10 @@ export const ContextProvider = ({ children }) => {
         isAdmin,
         setIsAdmin,
         isAuthenticated,
-        setIsAuthenticated,
+        setIsAuthenticated, 
       }}
     >
-      {children}
+            {children}
     </StateContext.Provider>
   );
 };

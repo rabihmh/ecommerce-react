@@ -2,9 +2,16 @@ import React from 'react';
 import { createBrowserRouter,} from "react-router-dom";
 import GuestLayout from './components/layouts/GuestLayout';
 import AuthLayout from './components/layouts/AuthLayout';
+import AdminLayout from './components/layouts/AdminLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import Products from './pages/Admin/Products';
+import ProductEdit from './pages/Admin/ProductEdit';
+import AddProduct from './pages/Admin/AddProduct';
+import CategoryList from './pages/Admin/CategoryList';
+import Dashboard from './pages/Admin/Dashboard'
+import ProductCollection from './pages/ProductCollection';
 const RouterComponent = createBrowserRouter([
   {
       path: '/',
@@ -27,7 +34,39 @@ const RouterComponent = createBrowserRouter([
       {
         path:'/home',
         element: <Home />
+      },
+      {
+        path:'/products',
+        element: <ProductCollection />
       }
+
+    ]
+  },
+  {
+    path: '/admin',
+    element: <AdminLayout />, 
+    children: [
+      {
+        path:'/admin/dashboard',
+        element: <Dashboard />
+      },
+      {
+        path:'/admin/products',
+        element: <Products />
+      },
+      {
+        path: '/admin/products/:id',
+        element: <ProductEdit /> 
+      },
+      {
+        path:'/admin/categories',
+        element: <CategoryList />
+      },
+      {
+        path:'/admin/products/add',
+        element: <AddProduct />
+      }
+
     ]
   }
 ]);
